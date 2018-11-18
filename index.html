@@ -71,7 +71,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        Locations
+                        <div class="list-group">
+                            <button v-for="location in getLocations()" type="button" class="list-group-item list-group-item-action" v-on:click="openLocation(location)">{{location.properties.title}}</button>
+                          </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,6 +113,13 @@
       }
     },
     methods: {
+      getLocations: function () {
+        if (this.map === 0) {
+          return []
+        } else {
+          return this.map.querySourceFeatures('composite', {sourceLayer: 'locations'})
+        }
+      },
       openCitations: function() {
         $('#citations').modal()
         return false
@@ -122,13 +131,13 @@
       openLocation: function(e) {
         this.showDescription = true
         this.currentLocation = {
-          title: e.features[0].properties.title,
-          description: e.features[0].properties.description
+          title: e.properties.title,
+          description: e.properties.description
         }
         this.map.flyTo({
-          center: e.features[0].geometry.coordinates
+          center: e.geometry.coordinates
         })
-        console.log(e.features)
+        $('#locations').modal('hide')
       }
     },
     mounted: function() {
@@ -136,12 +145,13 @@
       mapboxgl.accessToken = 'pk.eyJ1IjoibGlhbXJhdGhrZSIsImEiOiJjamE1c2RudHU0OTVzMnhwY3B5ZHpiZWt6In0.ECjz6xhpqAS0bAVP6kK_tw'
       self.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/liamrathke/cjomhm4ns1p122smw35ui01ed'
+        style: 'mapbox://styles/liamrathke/cjoml4jqj23412sn9nx1de2m5'
       })
       self.map.on('load', () => {
-        self.map.on('click', 'locations-87arvq', (e) => {
-          self.openLocation(e)
+        self.map.on('click', 'locations', (e) => {
+          self.openLocation(e.features[0])
         })
+        self.$forceUpdate()
         self.map.resize()
       })
     }

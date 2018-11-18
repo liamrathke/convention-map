@@ -1,14 +1,44 @@
 {
     "type": "FeatureCollection",
-      "features": [{
+    "features": [{
         "type": "Feature",
         "geometry": {
-          "type": "Point",
-          "coordinates": [12.4964, 41.9028]
+            "type": "Point",
+            "coordinates": [12.4964, 41.9028]
         },
         "properties": {
-          "title": "Rome",
-          "description: "The center of the Roman empire!"
+            "title": "Rome",
+            "description": "The lofty center of the Roman Empire!"
         }
-      }]
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-6.6203, 53.1424]
+        },
+        "properties": {
+            "title": "Hibernia",
+            "description": "Although Ireland is not thought of as a formal colony of the Roman Empire, Roman troops did visit, leaving behind archeological remains."
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [71.5249, 34.0151]
+        },
+        "properties": {
+            "title": "Kushan Empire",
+            "description": "The Kushan Empire grew famous in the classical era as a pepper producer; pepper was very expensive commodity in Roman times."
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [108.9398, 34.3416]
+        },
+        "properties": {
+            "title": "Thinae",
+            "description": "Thinae, or Xi'an, is described by Ptolemy as a \"land of silk\". Here, silk products began their journey on the Silk Road, which would eventually make its way to the Roman Empire."
+        }
+    }]
 }
