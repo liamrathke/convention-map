@@ -46,16 +46,17 @@
                   </ul>
             </div>
         </div>
-        <div id="description v-if="showDescription">
+        <div id="description" v-if="showDescription">
             <div class="container">
                 <div class="card">
                     <div class="card-header">
-                        Featured
+                        {{currentLocation.title}}
+                        <button class="btn btn-xs btn-danger float-right pt-0 pb-0" type="button" v-on:click="showDescription = false">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <p class="card-text">{{currentLocation.description}}</p>
                     </div>
                 </div>
             </div>
@@ -118,9 +119,16 @@
         $('#locations').modal()
         return false
       },
-      openLocation: function(location) {
+      openLocation: function(e) {
         this.showDescription = true
-        console.log(location)
+        this.currentLocation = {
+          title: e.features[0].properties.title,
+          description: e.features[0].properties.description
+        }
+        this.map.flyTo({
+          center: e.features[0].geometry.coordinates
+        })
+        console.log(e.features)
       }
     },
     mounted: function() {
@@ -156,8 +164,9 @@
   }
   #description {
     position: absolute;
-    bottom: 0;
+    bottom: 1em;
     left: 0;
+    width: 100%;
   }
   button:focus {
     outline: none;
