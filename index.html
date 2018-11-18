@@ -154,7 +154,11 @@
       mapboxgl.accessToken = 'pk.eyJ1IjoibGlhbXJhdGhrZSIsImEiOiJjamE1c2RudHU0OTVzMnhwY3B5ZHpiZWt6In0.ECjz6xhpqAS0bAVP6kK_tw'
       self.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/liamrathke/cjoml4jqj23412sn9nx1de2m5'
+        style: 'mapbox://styles/liamrathke/cjoml4jqj23412sn9nx1de2m5',
+        maxBounds: [
+          [-18.2922, 58.1466],
+          [118.8171, -11.7398]
+        ]
       })
       self.map.on('load', () => {
         self.map.on('click', 'locations', (e) => {
