@@ -5,6 +5,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!--Open Sans-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!--VueJS-->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!--Mapbox GL JS-->
@@ -14,21 +18,15 @@
 
 <body>
     <div id="app">
-        <nav div id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="#">The Roman Known World</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Locations</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" v-on:click="openLocations()" href="#">Locations</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" v-on:click="openCitations()" href="#">Citations</a>
@@ -37,6 +35,49 @@
             </div>
         </nav>
         <div id="map"></div>
+        <div id="legend">
+            <div class="container">
+                <ul class="list-group mt-2">
+                      <li class="list-group-item d-flex justify-content-around">
+                        <span>Year: <b>200 CE</b></span>
+                        <span><i class="fa fa-circle dark-purple mr-1"></i>Roman Empire</span>
+                        <span><i class="fa fa-circle light-purple mr-1"></i>Known World</span>
+                      </li>
+                  </ul>
+            </div>
+        </div>
+        <div id="description v-if="showDescription">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="locations" tabindex="-1" role="dialog" aria-labelledby="locations-title" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="locations-title">Locations</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Locations
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="citations" tabindex="-1" role="dialog" aria-labelledby="citations-title" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -64,29 +105,45 @@
     data: function() {
       return {
         map: 0,
+        currentLocation: {},
+        showDescription: false,
       }
     },
     methods: {
       openCitations: function() {
         $('#citations').modal()
         return false
+      },
+      openLocations: function() {
+        $('#locations').modal()
+        return false
+      },
+      openLocation: function(location) {
+        this.showDescription = true
+        console.log(location)
       }
     },
     mounted: function() {
-      var map = this.map
+      var self = this
       mapboxgl.accessToken = 'pk.eyJ1IjoibGlhbXJhdGhrZSIsImEiOiJjamE1c2RudHU0OTVzMnhwY3B5ZHpiZWt6In0.ECjz6xhpqAS0bAVP6kK_tw'
-      map = new mapboxgl.Map({
+      self.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/liamrathke/cjom4dp6p1crh2smwderrh3i0'
+        style: 'mapbox://styles/liamrathke/cjomhm4ns1p122smw35ui01ed'
       })
-      map.on('load', () => {
-        map.resize()
+      self.map.on('load', () => {
+        self.map.on('click', 'locations-87arvq', (e) => {
+          self.openLocation(e)
+        })
+        self.map.resize()
       })
     }
   })
 </script>
 
 <style>
+  * {
+    font-family: 'Open Sans', sans-serif;
+  }
   #nav {
     z-index: 50;
   }
@@ -97,8 +154,19 @@
     width: 100%;
     height: 100%;
   }
+  #description {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
   button:focus {
     outline: none;
+  }
+  .dark-purple {
+    color: #ac9bc5;
+  }
+  .light-purple {
+    color: #e0c4ed;
   }
 </style>
 
